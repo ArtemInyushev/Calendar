@@ -1,0 +1,25 @@
+﻿th {
+    font-size: large;
+}
+
+a {
+    text-decoration: none;
+}
+
+.tablecell {
+    width: 100%;
+    height: 100%;
+}
+
+.grey {
+    color: grey;
+}
+
+.black {
+    color: black;
+}
+
+.number {
+    top: 0;
+    float: right;
+}

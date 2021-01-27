@@ -1,0 +1,40 @@
+﻿@using Calendar.ModelViews
+@model TasksView
+
+@{
+    DateTime date = Model.Date;
+    List<Calendar.Models.Task> tasks = Model.Tasks;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tasks</title>
+    <link type="text/css" href="~/css/styles.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>@date.ToString("dddd, dd MMMM yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</h2>
+    <ul>
+        @{
+            foreach (var task in tasks) {
+                <li>
+                    <form method="post" action="/Delete/Task">
+                        <span>@task.Time     </span>
+                        <span>@task.Desc</span>
+                        <input type="hidden" value="@task.Id" name="id" />
+                        <input type="submit" value="Delete" />
+                    </form>
+                </li>
+            }
+        }
+    </ul>
+    <form method="post" action="/Add/Task">
+        <input type="hidden" name="Year" value="@date.Year" />
+        <input type="hidden" name="Month" value="@date.Month" />
+        <input type="hidden" name="Day" value="@date.Day" />
+        <input type="time" name="Time" required />
+        <input type="text" name="Desc" placeholder="Description" required />
+        <input type="submit" value="Add" />
+    </form>
+</body>
+</html>

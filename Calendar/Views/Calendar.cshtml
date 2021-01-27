@@ -1,0 +1,85 @@
+﻿@using Calendar.ModelViews
+@model TasksView
+
+@{ 
+    List<Calendar.Models.Task> tasks = Model.Tasks;
+    DateTime date = Model.Date;
+    DateTime[,] calendar = Model.Calendar;
+    DateTime prev = date.AddMonths(-1);
+    DateTime next = date.AddMonths(1);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@date.ToString("MMMM", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</title>
+    <link type="text/css" href="~/css/styles.css" rel="stylesheet" />
+</head>
+<body>
+    <table border="1">
+        <caption>
+            <form method="get" action="/Calendar" id="prev">
+                <input type="hidden" value="@prev.Year" name="y" />
+                <input type="hidden" value="@prev.Month" name="m" />
+            </form>
+            <form method="get" action="/Calendar" id="next">
+                <input type="hidden" value="@next.Year" name="y" />
+                <input type="hidden" value="@next.Month" name="m" />
+            </form>
+
+            <button type="submit" form="prev" value="Submit"><</button>
+            @date.ToString("MMMM yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))
+            <button type="submit" form="next" value="Submit">></button>
+        </caption>
+        <tr>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+        </tr>
+        @{
+            for (int i = 0; i < 6; i++) {
+                <tr>
+                    @{
+
+                        for(int j = 0; j < 7; j++) {
+                            int year = calendar[i, j].Year;
+                            int month = calendar[i, j].Month;
+                            int day = calendar[i, j].Day;
+                            string cellstyle = "tablecell number ";
+                            if(month == date.Month) {
+                                cellstyle += "black";
+                            }
+                            else {
+                                cellstyle += "grey";
+                            }
+
+                            <td>
+                                <a href="/Tasks/?y=@year&m=@month&d=@day">
+                                    <div class="@cellstyle">
+                                        <big>@day</big>
+                                        @{
+                                            if (month == date.Month) {
+                                                int count = 0;
+                                                foreach (var task in tasks) {
+                                                    if (task.Day == day) count++;
+                                                }
+                                                if (count > 0) {
+                                                    <small class="number">@count</small>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </a>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        }
+    </table>
+</body>
+</html>
